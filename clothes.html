@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Clothes — Garet quettes</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Dancing+Script:wght@500&display=swap" rel="stylesheet"/>
+  <style>
+    /* =============================================
+       CSS VARIABLES
+    ============================================= */
+    :root{
+      --pink-blush:#f9e8ec;--pink-soft:#f2c4ce;--pink-mid:#e8a0af;
+      --pink-deep:#c97b8a;--pink-rose:#b05070;--cream:#fdf6f0;
+      --white:#ffffff;--text-dark:#3a2030;--text-mid:#7a5060;
+      --bow:#e8748a;
+      --font-h:'Playfair Display',serif;
+      --font-b:'Cormorant Garamond',serif;
+      --font-s:'Dancing Script',cursive;
+    }
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{font-family:var(--font-b);background:var(--cream);color:var(--text-dark);overflow-x:hidden;}
+
+    /* NAV */
+    nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(253,246,240,.93);backdrop-filter:blur(10px);border-bottom:1.5px solid var(--pink-soft);padding:14px 48px;display:flex;align-items:center;justify-content:space-between;}
+    .nav-logo{font-family:var(--font-s);font-size:1.9rem;color:var(--pink-rose);text-decoration:none;}
+    .nav-links{display:flex;gap:32px;list-style:none;}
+    .nav-links a{font-family:var(--font-b);font-size:1rem;color:var(--text-mid);text-decoration:none;letter-spacing:1.5px;text-transform:uppercase;font-weight:300;transition:color .3s;position:relative;}
+    .nav-links a::after{content:'';position:absolute;bottom:-3px;left:0;width:0;height:1.5px;background:var(--bow);transition:width .3s;}
+    .nav-links a:hover{color:var(--bow);}
+    .nav-links a:hover::after,.nav-links a.active::after{width:100%;}
+    .nav-links a.active{color:var(--bow);}
+
+    /* PAGE HEADER */
+    .page-header{padding:130px 48px 60px;text-align:center;background:linear-gradient(135deg,var(--pink-blush),var(--cream));}
+    .page-header h1{font-family:var(--font-h);font-size:clamp(2.5rem,5vw,4rem);color:var(--text-dark);}
+    .page-header h1 em{color:var(--pink-rose);font-style:italic;}
+    .page-header p{font-family:var(--font-s);font-size:1.2rem;color:var(--bow);margin-top:8px;}
+    .breadcrumb{font-size:.9rem;color:var(--text-mid);margin-bottom:14px;letter-spacing:.5px;}
+    .breadcrumb a{color:var(--pink-deep);text-decoration:none;}
+    .breadcrumb a:hover{text-decoration:underline;}
+
+    /* GRID */
+    .shop-wrap{padding:60px 48px 100px;max-width:1200px;margin:0 auto;}
+    .product-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:32px;}
+
+    /* =============================================
+       PRODUCT CARD
+       ★ TO ADD A PRODUCT: Copy one .product-card
+         div below. Update:
+         - img src= (your photo URL)
+         - data-name, data-price, data-desc attrs
+         - .pname and .pprice text
+    ============================================= */
+    .product-card{
+      background:var(--white);border-radius:20px;overflow:hidden;
+      box-shadow:0 4px 20px rgba(180,80,110,.08);
+      border:1.5px solid var(--pink-blush);
+      cursor:pointer;
+      transition:transform .35s,box-shadow .35s;
+      opacity:0;transform:translateY(24px);
+    }
+    .product-card.visible{opacity:1;transform:translateY(0);transition:opacity .5s ease,transform .5s ease,box-shadow .3s;}
+    .product-card:hover{transform:translateY(-6px);box-shadow:0 14px 40px rgba(180,80,110,.18);}
+    .product-card img{width:100%;height:280px;object-fit:cover;display:block;background:var(--pink-blush);}
+    .pcard-body{padding:18px 20px 22px;}
+    .pbadge{display:inline-block;font-family:var(--font-s);font-size:.78rem;background:var(--pink-blush);color:var(--pink-rose);padding:3px 10px;border-radius:20px;margin-bottom:7px;}
+    .pname{font-family:var(--font-h);font-size:1.15rem;color:var(--text-dark);margin-bottom:4px;}
+    .pname em{color:var(--pink-rose)}
+    .pprice{font-size:1rem;color:var(--pink-rose);font-weight:400;letter-spacing:.5px;}
+    .pview{display:block;margin-top:12px;padding:9px 0;background:var(--pink-blush);color:var(--pink-rose);border:none;border-radius:30px;width:100%;font-family:var(--font-b);font-size:.95rem;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;transition:background .3s,color .3s;}
+    .pview:hover{background:var(--pink-rose);color:var(--white);}
+
+    /* =============================================
+       PRODUCT MODAL (short info popup)
+    ============================================= */
+    .modal-overlay{position:fixed;inset:0;background:rgba(58,32,48,.45);backdrop-filter:blur(4px);z-index:500;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s;}
+    .modal-overlay.open{opacity:1;pointer-events:all;}
+    .modal{background:var(--white);border-radius:28px;max-width:680px;width:90%;max-height:90vh;overflow:hidden;display:grid;grid-template-columns:1fr 1fr;box-shadow:0 24px 80px rgba(58,32,48,.22);transform:translateY(30px) scale(.97);transition:transform .35s,opacity .35s;opacity:0;}
+    .modal-overlay.open .modal{transform:translateY(0) scale(1);opacity:1;}
+    .modal-img{width:100%;height:100%;min-height:320px;object-fit:cover;display:block;background:var(--pink-blush);}
+    .modal-body{padding:32px 28px;display:flex;flex-direction:column;justify-content:center;overflow-y:auto;}
+    .modal-badge{font-family:var(--font-s);font-size:.9rem;color:var(--bow);margin-bottom:8px;}
+    .modal-name{font-family:var(--font-h);font-size:1.6rem;color:var(--text-dark);line-height:1.2;margin-bottom:6px;}
+    .modal-price{font-size:1.2rem;color:var(--pink-rose);letter-spacing:.5px;margin-bottom:16px;}
+    .modal-desc{font-size:1rem;color:var(--text-mid);line-height:1.75;font-weight:300;margin-bottom:22px;}
+    .modal-close{position:absolute;top:18px;right:22px;background:var(--pink-blush);border:none;border-radius:50%;width:36px;height:36px;font-size:1.1rem;cursor:pointer;color:var(--pink-rose);transition:background .2s;}
+    .modal-close:hover{background:var(--pink-soft);}
+    .modal-btn{display:inline-block;padding:12px 32px;background:var(--pink-rose);color:var(--white);border:none;border-radius:50px;font-family:var(--font-b);font-size:1rem;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;transition:background .3s;}
+    .modal-btn:hover{background:var(--bow);}
+    .modal-wrapper{position:relative;}
+
+    /* FOOTER */
+    footer{background:var(--text-dark);color:var(--pink-soft);text-align:center;padding:40px 24px;font-family:var(--font-b);}
+    .foot-logo{font-family:var(--font-s);font-size:1.8rem;color:var(--pink-mid);margin-bottom:10px;}
+    footer p{opacity:.55;font-size:.9rem;margin-top:6px;}
+
+    @media(max-width:800px){
+      nav{padding:14px 20px;}
+      .nav-links{gap:16px;}
+      .page-header{padding:110px 20px 50px;}
+      .shop-wrap{padding:40px 20px 80px;}
+      .modal{grid-template-columns:1fr;}
+      .modal-img{min-height:220px;max-height:220px;}
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">🎀 Garet quettes</a>
+  <ul class="nav-links">
+    <li><a href="about.html">About</a></li>
+    <li><a href="clothes.html" class="active">Clothes</a></li>
+    <li><a href="shoes.html">Shoes</a></li>
+    <li><a href="accessories.html">Accessories</a></li>
+    <li><a href="hats.html">Hats</a></li>
+  </ul>
+</nav>
+
+<div class="page-header">
+  <div class="breadcrumb"><a href="index.html">Home</a> / Clothes</div>
+  <h1>Our <em>Clothes</em></h1>
+  <p>Ribbons, ruffles &amp; everything sweet 🎀</p>
+</div>
+
+<div class="shop-wrap">
+  <div class="product-grid">
+
+    <!--
+      ★ PRODUCT CARD — How to add a new product:
+      1. Copy this entire block
+      2. Change img src= to your photo URL
+      3. Change data-name, data-price, data-desc
+      4. Change .pname and .pprice text
+      5. Paste inside .product-grid
+    -->
+    <div class="product-card"
+      data-img="https://i.imgur.com/diGH5cD.jpg"
+      data-name="Seraphina Lace Dress"
+      data-price="₱1,299"
+      data-badge="🎀 New Arrival"
+      data-desc="A dream of delicate lace and satin bows. This piece features a unique criss-cross neckline and a soft, tiered silhouette. Perfect for tea parties and golden hour.">
+      <img src="https://i.imgur.com/diGH5cD.jpg" alt="Garet quettes Seraphina Lace Dress"/>
+      <div class="pcard-body">
+        <span class="pbadge">🎀 New Arrival</span>
+        <div class="pname"><em>Garet quettes:</em> quettes Seraphina Lace Dress</div><!-- ★ edit name -->
+        <div class="pprice">₱1,299</div><!-- ★ edit price -->
+        <button class="pview">View Details</button>
+      </div>
+    </div>
+
+    <div class="product-card"
+      data-img="https://i.imgur.com/nD3zUou.jpg"
+      data-name="Aurelia Doll Mini Dress"
+      data-price="₱749"
+      data-badge="🌸 Bestseller"
+      data-desc="A ballerina-inspired silhouette featuring delicate floral lace and a signature oversized satin bow. Includes a matching long-sleeve bolero for a layered, ethereal look.">
+      <img src="https://i.imgur.com/nD3zUou.jpg" alt="Aurelia Doll Mini Dress"/>
+      <div class="pcard-body">
+        <span class="pbadge">🌸 Bestseller</span>
+        <div class="pname"><em>Garet quettes:</em> Aurelia Doll Mini Dress</div>
+        <div class="pprice">₱749</div>
+        <button class="pview">View Details</button>
+      </div>
+    </div>
+
+    <div class="product-card"
+      data-img="https://i.imgur.com/3GAFehJ.jpg"
+      data-name="Antoinette Lace Babydoll"
+      data-price="₱899"
+      data-badge="🎀 Limited"
+      data-desc="A regal, vintage-inspired mini featuring layered scalloped lace and pearl-accented ribbons. Crafted from a soft cotton-silk blend with a flattering empire waist. Truly a limited-edition treasure.">
+      <img src="https://i.imgur.com/3GAFehJ.jpg" alt="Antoinette Lace Babydoll"/>
+      <div class="pcard-body">
+        <span class="pbadge">🎀 Limited</span>
+        <div class="pname"><em>Garet quettes:</em> Antoinette Lace Babydoll</div>
+        <div class="pprice">₱899</div>
+        <button class="pview">View Details</button>
+      </div>
+    </div>
+
+    <div class="product-card"
+      data-img="https://i.imgur.com/QfTYNJd.jpg"
+      data-name="Fleur de Lis Tiered Dress"
+      data-price="₱1,050"
+      data-desc="Step into a dream with this voluminous lace dress. Adorned with dainty pink bows and intricate floral embroidery, it’s designed for those who love a timeless, romantic look.">
+      <img src="https://i.imgur.com/QfTYNJd.jpg" alt="Rosette Knit Cardigan"/>
+      <div class="pcard-body">
+        <span class="pbadge"></span>
+        <div class="pname"><em>Garet quettes:</em> Fleur de Lis Tiered Dress</div>
+        <div class="pprice">₱1,050</div>
+        <button class="pview">View Details</button>
+      </div>
+    </div>
+
+    <div class="product-card"
+      data-img="https://i.imgur.com/Aa0lFQt.jpg"
+      data-name="Odette Ballet Set"
+      data-price="₱1,050"
+      data-desc="Soft meets chic in this two-piece ensemble. Features a lace-trimmed ribbed top and a flirty, multi-layered ruffle skirt with dainty bows.">
+      <img src="https://i.imgur.com/Aa0lFQt.jpg" alt="Rosette Knit Cardigan"/>
+      <div class="pcard-body">
+        <span class="pbadge"></span>
+        <div class="pname"><em>Garet quettes:</em> Odette Ballet Set</div>
+        <div class="pprice">₱1,050</div>
+        <button class="pview">View Details</button>
+      </div>
+    </div>
+
+
+        <div class="product-card"
+      data-img="https://i.imgur.com/JyHtM81.jpg"
+      data-name="Fleur Ribbon Cardigan Set"
+      data-price="₱1,050"
+      data-desc="A soft ribbed cardigan paired with a dainty ruffled skirt. Features a delicate ribbon tie and lace accents for a sweet, aesthetic look.">
+      <img src="https://i.imgur.com/JyHtM81.jpg" alt="Rosette Knit Cardigan"/>
+      <div class="pcard-body">
+        <span class="pbadge"></span>
+        <div class="pname"><em>Garet quettes:</em> Ribbon Cardigan Set</div>
+        <div class="pprice">₱1,050</div>
+        <button class="pview">View Details</button>
+      </div>
+    </div>
+
+
+        <div class="product-card"
+      data-img="https://i.imgur.com/joMWZXE.jpg"
+      data-name="Luvie Ruffle Mini"
+      data-price="₱1,050"
+      data-desc="A stunning tutu-style mini dress featuring voluminous lace ruffles and a silky ribbon corset bodice. Perfect for a bold yet sweet coquette statement.">
+      <img src="https://i.imgur.com/joMWZXE.jpg" alt="Rosette Knit Cardigan"/>
+      <div class="pcard-body">
+        <span class="pbadge"></span>
+        <div class="pname"><em>Garret quettes:</em> Luvie Ruffle Mini</div>
+        <div class="pprice">₱1,050</div>
+        <button class="pview">View Details</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-wrapper">
+    <div class="modal" id="modal">
+      <img class="modal-img" id="modalImg" src="" alt=""/>
+      <div class="modal-body">
+        <div class="modal-badge" id="modalBadge"></div>
+        <div class="modal-name"  id="modalName"></div>
+        <div class="modal-price" id="modalPrice"></div>
+        <div class="modal-desc"  id="modalDesc"></div>
+        <button class="modal-btn">Add to Cart 🎀</button>
+      </div>
+    </div>
+    <button class="modal-close" id="modalClose">✕</button>
+  </div>
+</div>
+
+<footer>
+  <div class="foot-logo">🎀 Garet quettes</div>
+  <p>© 2025 Garet quettes. All rights reserved.</p>
+  <p>Made with love &amp; ribbons 🌸</p>
+</footer>
+
+<script>
+  // Scroll reveal
+  const cards = document.querySelectorAll('.product-card');
+  const io = new IntersectionObserver(entries=>{
+    entries.forEach((e,i)=>{
+      if(e.isIntersecting){setTimeout(()=>e.target.classList.add('visible'),i*80);io.unobserve(e.target);}
+    });
+  },{threshold:.1});
+  cards.forEach(c=>io.observe(c));
+
+  // Modal
+  const overlay = document.getElementById('modalOverlay');
+  const modalClose = document.getElementById('modalClose');
+
+  cards.forEach(card=>{
+    card.addEventListener('click',()=>{
+      document.getElementById('modalImg').src   = card.dataset.img;
+      document.getElementById('modalName').textContent  = card.dataset.name;
+      document.getElementById('modalPrice').textContent = card.dataset.price;
+      document.getElementById('modalDesc').textContent  = card.dataset.desc;
+      document.getElementById('modalBadge').textContent = card.dataset.badge;
+      overlay.classList.add('open');
+      document.body.style.overflow='hidden';
+    });
+  });
+
+  function closeModal(){overlay.classList.remove('open');document.body.style.overflow='';}
+  modalClose.addEventListener('click',closeModal);
+  overlay.addEventListener('click',e=>{if(e.target===overlay)closeModal();});
+  document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
+</script>
+</body>
+</html>

@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Garet quettes</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Dancing+Script:wght@500&display=swap" rel="stylesheet"/>
+  <style>
+    /* =============================================
+       CSS VARIABLES — edit brand colors/fonts here
+    ============================================= */
+    :root {
+      --pink-blush:  #f9e8ec;
+      --pink-soft:   #f2c4ce;
+      --pink-mid:    #e8a0af;
+      --pink-deep:   #c97b8a;
+      --pink-rose:   #b05070;
+      --cream:       #fdf6f0;
+      --white:       #ffffff;
+      --text-dark:   #3a2030;
+      --text-mid:    #7a5060;
+      --bow:         #e8748a;
+      --font-h:      'Playfair Display', serif;
+      --font-b:      'Cormorant Garamond', serif;
+      --font-s:      'Dancing Script', cursive;
+    }
+    *{margin:0;padding:0;box-sizing:border-box;}
+    html{scroll-behavior:smooth;}
+    body{font-family:var(--font-b);background:var(--cream);color:var(--text-dark);overflow-x:hidden;}
+
+    /* NAV */
+    nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(253,246,240,.93);backdrop-filter:blur(10px);border-bottom:1.5px solid var(--pink-soft);padding:14px 48px;display:flex;align-items:center;justify-content:space-between;}
+    .nav-logo{font-family:var(--font-s);font-size:1.9rem;color:var(--pink-rose);text-decoration:none;}
+    .nav-links{display:flex;gap:32px;list-style:none;}
+    .nav-links a{font-family:var(--font-b);font-size:1rem;color:var(--text-mid);text-decoration:none;letter-spacing:1.5px;text-transform:uppercase;font-weight:300;transition:color .3s;position:relative;}
+    .nav-links a::after{content:'';position:absolute;bottom:-3px;left:0;width:0;height:1.5px;background:var(--bow);transition:width .3s;}
+    .nav-links a:hover{color:var(--bow);}
+    .nav-links a:hover::after{width:100%;}
+    .nav-links a.active{color:var(--bow);}
+    .nav-links a.active::after{width:100%;}
+
+    /* HERO */
+    #hero{min-height:100vh;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;background:linear-gradient(135deg,var(--pink-blush) 0%,var(--cream) 60%,#fde8ef 100%);}
+    .hero-circle{position:absolute;border-radius:50%;opacity:.18;pointer-events:none;}
+    .hero-circle:nth-child(1){width:500px;height:500px;background:radial-gradient(circle,var(--pink-mid),transparent);top:-100px;right:-100px;}
+    .hero-circle:nth-child(2){width:350px;height:350px;background:radial-gradient(circle,var(--pink-soft),transparent);bottom:-80px;left:-60px;}
+    .hero-content{text-align:center;position:relative;z-index:2;animation:fadeUp 1s ease both;}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+    .hero-eye{font-family:var(--font-s);font-size:1.4rem;color:var(--bow);letter-spacing:2px;margin-bottom:10px;animation:fadeUp 1s .2s ease both;}
+    .hero-title{font-family:var(--font-h);font-size:clamp(3rem,8vw,6.5rem);color:var(--text-dark);line-height:1.1;letter-spacing:-1px;animation:fadeUp 1s .3s ease both;}
+    .hero-title em{color:var(--pink-rose);font-style:italic;}
+    .hero-sub{font-size:1.25rem;color:var(--text-mid);font-weight:300;margin-top:18px;letter-spacing:.5px;animation:fadeUp 1s .4s ease both;}
+    .hero-bows{margin:28px 0;animation:fadeUp 1s .5s ease both;font-size:1.4rem;}
+    .hero-cta{display:inline-block;margin-top:10px;padding:14px 44px;background:var(--pink-rose);color:var(--white);font-family:var(--font-b);font-size:1rem;letter-spacing:2px;text-transform:uppercase;text-decoration:none;border-radius:50px;transition:background .3s,transform .2s,box-shadow .3s;box-shadow:0 4px 24px rgba(200,100,130,.18);animation:fadeUp 1s .6s ease both;}
+    .hero-cta:hover{background:var(--bow);transform:translateY(-2px);box-shadow:0 8px 32px rgba(200,100,130,.28);}
+
+    /* HERO IMAGE ROW */
+    .hero-imgs{display:flex;gap:20px;justify-content:center;margin-top:54px;animation:fadeUp 1s .7s ease both;}
+    .hero-img-card{width:220px;height: 320px;border-radius:120px 120px 20px 20px;overflow:hidden;box-shadow:0 12px 40px rgba(180,80,110,.13);border:3px solid var(--pink-soft);transition:transform .4s;}
+    .hero-img-card:nth-child(2){margin-top:40px;border-radius:20px 20px 120px 120px;}
+    .hero-img-card:hover{transform:translateY(-8px) rotate(1.5deg);}
+    .hero-img-card img{width:100%;height:100%;object-fit:cover;}
+
+    /* CATEGORY CARDS */
+    #categories{padding:100px 48px 80px;background:var(--cream);}
+    .cat-title{font-family:var(--font-h);font-size:clamp(2rem,4vw,3rem);text-align:center;margin-bottom:8px;}
+    .cat-title em{color:var(--pink-rose);font-style:italic;}
+    .cat-sub{font-family:var(--font-s);font-size:1.2rem;color:var(--bow);text-align:center;margin-bottom:50px;}
+    .cat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:28px;max-width:1100px;margin:0 auto;}
+    .cat-card{background:var(--white);border-radius:24px;overflow:hidden;box-shadow:0 4px 24px rgba(180,80,110,.09);border:1.5px solid var(--pink-blush);text-decoration:none;color:inherit;transition:transform .35s,box-shadow .35s;display:block;}
+    .cat-card:hover{transform:translateY(-8px);box-shadow:0 14px 40px rgba(180,80,110,.18);}
+    .cat-img{width:100%;height:240px;object-fit:cover;display:block;background:var(--pink-blush);}
+    .cat-info{padding:22px 20px 24px;text-align:center;}
+    .cat-name{font-family:var(--font-h);font-size:1.3rem;margin-bottom:6px;}
+    .cat-count{font-size:.95rem;color:var(--text-mid);font-weight:300;letter-spacing:.5px;}
+    .cat-arrow{display:inline-block;margin-top:12px;font-size:.85rem;letter-spacing:2px;text-transform:uppercase;color:var(--bow);}
+
+    /* FOOTER */
+    footer{background:var(--text-dark);color:var(--pink-soft);text-align:center;padding:40px 24px;font-family:var(--font-b);}
+    .foot-logo{font-family:var(--font-s);font-size:1.8rem;color:var(--pink-mid);margin-bottom:10px;}
+    footer p{opacity:.55;font-size:.9rem;margin-top:6px;}
+
+    /* REVEAL */
+    .reveal{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s ease;}
+    .reveal.visible{opacity:1;transform:translateY(0);}
+
+    @media(max-width:900px){
+      nav{padding:14px 20px;}
+      .nav-links{gap:16px;}
+      #categories{padding:80px 20px;}
+      .cat-grid{grid-template-columns:repeat(2,1fr);}
+      .hero-imgs{display:none;}
+    }
+    @media(max-width:500px){
+      .cat-grid{grid-template-columns:1fr;}
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">🎀 Garet quettes</a>
+  <ul class="nav-links">
+     <li><a href="about.html">About</a></li>
+    <li><a href="clothes.html">Clothes</a></li>
+    <li><a href="shoes.html">Shoes</a></li>
+    <li><a href="accessories.html">Accessories</a></li>
+    <li><a href="hats.html">Hats</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-circle"></div>
+  <div class="hero-circle"></div>
+  <div class="hero-content">
+    <div class="hero-eye">✦ Darling, Welcome ✦</div>
+    <h1 class="hero-title">Garet<em>quettes</em></h1>
+    <p class="hero-sub">Soft, feminine &amp; utterly adorable fashion for the modern coquette</p>
+    <div class="hero-bows">🎀 &nbsp; 🌸 &nbsp; 🎀</div>
+    <a href="#categories" class="hero-cta">Shop the Collection</a>
+    <!-- ★ HERO IMAGES — change src to your own Unsplash URLs -->
+    <div class="hero-imgs">
+      <div class="hero-img-card"><img src="https://i.imgur.com/K42FS5F.jpg" alt=""/></div>
+      <div class="hero-img-card"><img src="https://i.imgur.com/jJhypkq.jpg" alt=""/></div>
+      <div class="hero-img-card"><img src="https://i.imgur.com/ZgLMQ2K.jpg" alt=""/></div>
+    </div>
+  </div>
+</section>
+
+<!-- CATEGORY CARDS -->
+<section id="categories">
+  <h2 class="cat-title reveal">Shop by <em>Category</em></h2>
+  <p class="cat-sub reveal">What are you looking for today?</p>
+  <div class="cat-grid">
+
+    <!-- ★ CATEGORY CARD — change img src and item count -->
+    <a href="clothes.html" class="cat-card reveal">
+      <img class="cat-img" src="https://i.imgur.com/F0B4Kxn.jpg" alt="Clothes"/>
+      <div class="cat-info">
+        <div class="cat-name">Clothes</div>
+        <div class="cat-count">7 items</div>
+        <div class="cat-arrow">Shop Now →</div>
+      </div>
+    </a>
+
+    <a href="shoes.html" class="cat-card reveal">
+      <img class="cat-img" src="https://i.imgur.com/3zwUW9S.jpg" alt="Shoes"/>
+      <div class="cat-info">
+        <div class="cat-name">Shoes</div>
+        <div class="cat-count">4 items</div>
+        <div class="cat-arrow">Shop Now →</div>
+      </div>
+    </a>
+
+    <a href="accessories.html" class="cat-card reveal">
+      <img class="cat-img" src="https://i.imgur.com/XxBpnuU.jpg" alt="Accessories"/>
+      <div class="cat-info">
+        <div class="cat-name">Accessories</div>
+        <div class="cat-count">9 items</div>
+        <div class="cat-arrow">Shop Now →</div>
+      </div>
+    </a>
+
+    <a href="hats.html" class="cat-card reveal">
+      <img class="cat-img" src="https://i.imgur.com/fWfnhaF.jpg" alt="Hats"/>
+      <div class="cat-info">
+        <div class="cat-name">Hats</div>
+        <div class="cat-count">4 items</div>
+        <div class="cat-arrow">Shop Now →</div>
+      </div>
+    </a>
+
+  </div>
+</section>
+
+<footer>
+  <div class="foot-logo">🎀 Garet quettes</div>
+  <p>© 2025 Garet quettes. All rights reserved.</p>
+  <p>Made with love &amp; ribbons 🌸</p>
+</footer>
+
+<script>
+  const els = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver(entries=>{
+    entries.forEach((e,i)=>{
+      if(e.isIntersecting){setTimeout(()=>e.target.classList.add('visible'),i*90);io.unobserve(e.target);}
+    });
+  },{threshold:.1});
+  els.forEach(el=>io.observe(el));
+</script>
+</body>
+</html>

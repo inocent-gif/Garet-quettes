@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>About — Garet quettes</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Dancing+Script:wght@500&display=swap" rel="stylesheet"/>
+  <style>
+    :root{--pink-blush:#f9e8ec;--pink-soft:#f2c4ce;--pink-mid:#e8a0af;--pink-deep:#c97b8a;--pink-rose:#b05070;--cream:#fdf6f0;--white:#ffffff;--text-dark:#3a2030;--text-mid:#7a5060;--bow:#e8748a;--font-h:'Playfair Display',serif;--font-b:'Cormorant Garamond',serif;--font-s:'Dancing Script',cursive;}
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{font-family:var(--font-b);background:var(--cream);color:var(--text-dark);overflow-x:hidden;}
+    nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(253,246,240,.93);backdrop-filter:blur(10px);border-bottom:1.5px solid var(--pink-soft);padding:14px 48px;display:flex;align-items:center;justify-content:space-between;}
+    .nav-logo{font-family:var(--font-s);font-size:1.9rem;color:var(--pink-rose);text-decoration:none;}
+    .nav-links{display:flex;gap:32px;list-style:none;}
+    .nav-links a{font-family:var(--font-b);font-size:1rem;color:var(--text-mid);text-decoration:none;letter-spacing:1.5px;text-transform:uppercase;font-weight:300;transition:color .3s;position:relative;}
+    .nav-links a::after{content:'';position:absolute;bottom:-3px;left:0;width:0;height:1.5px;background:var(--bow);transition:width .3s;}
+    .nav-links a:hover{color:var(--bow);}
+    .nav-links a:hover::after,.nav-links a.active::after{width:100%;}
+    .nav-links a.active{color:var(--bow);}
+
+    /* PAGE HEADER */
+    .page-header{padding:130px 48px 60px;text-align:center;background:linear-gradient(135deg,var(--pink-blush),var(--cream));}
+    .page-header h1{font-family:var(--font-h);font-size:clamp(2.5rem,5vw,4rem);color:var(--text-dark);}
+    .page-header h1 em{color:var(--pink-rose);font-style:italic;}
+    .page-header p{font-family:var(--font-s);font-size:1.2rem;color:var(--bow);margin-top:8px;}
+    .breadcrumb{font-size:.9rem;color:var(--text-mid);margin-bottom:14px;letter-spacing:.5px;}
+    .breadcrumb a{color:var(--pink-deep);text-decoration:none;}
+
+    /* ABOUT SECTION */
+    .about-wrap{padding:80px 48px 100px;max-width:1100px;margin:0 auto;}
+    .about-inner{display:grid;grid-template-columns:1fr 1.2fr;gap:80px;align-items:center;}
+
+    .about-img-wrap{position:relative;}
+
+    /* ★ OWNER PHOTO — change src= to your real photo URL */
+    .about-photo{width:100%;aspect-ratio:3/4;object-fit:cover;border-radius:120px 120px 20px 20px;box-shadow:0 20px 60px rgba(180,80,110,.18);border:4px solid var(--white);display:block;}
+
+    .about-tag{position:absolute;top:30px;left:-22px;background:var(--white);color:var(--pink-rose);font-family:var(--font-s);font-size:1rem;padding:7px 18px;border-radius:30px;box-shadow:0 4px 18px rgba(180,80,110,.12);}
+    .about-deco{position:absolute;bottom:-18px;right:-18px;width:120px;height:120px;background:var(--pink-soft);border-radius:50%;z-index:-1;opacity:.6;}
+
+    .about-text
+
+    /* ★ OWNER NAME — change "Sophia" in the h2 below */
+    .about-text h2{font-family:var(--font-h);font-size:clamp(2rem,3.5vw,3rem);color:var(--text-dark);line-height:1.15;margin-bottom:8px;}
+    .about-text h2 em{color:var(--pink-rose);font-style:italic;}
+    .about-script{font-family:var(--font-s);font-size:1.2rem;color:var(--bow);margin-bottom:24px;}
+
+    /* ★ BIO TEXT — edit paragraphs below in HTML */
+    .about-text p{font-size:1.15rem;color:var(--text-mid);line-height:1.9;font-weight:300;margin-bottom:16px;}
+
+    .about-pills{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px;}
+    /* ★ INTEREST TAGS — edit text in HTML */
+    .apill{background:var(--white);color:var(--pink-rose);font-family:var(--font-b);font-size:.9rem;padding:6px 18px;border-radius:30px;border:1.5px solid var(--pink-soft);letter-spacing:.5px;}
+
+    /* VALUES STRIP */
+    .values{background:var(--pink-blush);padding:70px 48px;margin-top:0;}
+    .values-inner{max-width:1000px;margin:0 auto;}
+    .values h3{font-family:var(--font-h);font-size:2rem;text-align:center;margin-bottom:8px;}
+    .values h3 em{color:var(--pink-rose);font-style:italic;}
+    .val-sub{font-family:var(--font-s);font-size:1.1rem;color:var(--bow);text-align:center;margin-bottom:44px;}
+    .val-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:32px;}
+    .val-card{background:var(--white);border-radius:20px;padding:32px 24px;text-align:center;box-shadow:0 4px 20px rgba(180,80,110,.07);border:1.5px solid var(--pink-blush);}
+    .val-icon{font-size:2.2rem;margin-bottom:12px;}
+    .val-title{font-family:var(--font-h);font-size:1.1rem;margin-bottom:8px;color:var(--text-dark);}
+    .val-desc{font-size:.95rem;color:var(--text-mid);line-height:1.7;font-weight:300;}
+
+    footer{background:var(--text-dark);color:var(--pink-soft);text-align:center;padding:40px 24px;font-family:var(--font-b);}
+    .foot-logo{font-family:var(--font-s);font-size:1.8rem;color:var(--pink-mid);margin-bottom:10px;}
+    footer p{opacity:.55;font-size:.9rem;margin-top:6px;}
+
+    .reveal{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s ease;}
+    .reveal.visible{opacity:1;transform:translateY(0);}
+
+    @media(max-width:900px){
+      nav{padding:14px 20px;}.nav-links{gap:16px;}
+      .about-wrap{padding:60px 20px 80px;}
+      .about-inner{grid-template-columns:1fr;gap:40px;}
+      .values{padding:60px 20px;}
+      .val-grid{grid-template-columns:1fr;}
+    }
+  </style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="nav-logo">🎀 Garet quettes</a>
+  <ul class="nav-links">
+    <li><a href="about.html">About</a></li>
+    <li><a href="clothes.html">Clothes</a></li>
+    <li><a href="shoes.html">Shoes</a></li>
+    <li><a href="accessories.html">Accessories</a></li>
+    <li><a href="hats.html">Hats</a></li>
+  </ul>
+</nav>
+
+<div class="page-header">
+  <div class="breadcrumb"><a href="index.html">Home</a> / About</div>
+  <h1>Meet the <em>Founder</em></h1>
+  <p>The girl behind the bows 🌸</p>
+</div>
+
+<div class="about-wrap">
+  <div class="about-inner">
+
+    <div class="about-img-wrap reveal">
+      <!--
+        ★ REPLACE src= with your own photo URL
+        Recommended size: at least 600×800px portrait
+        Example: src="https://images.unsplash.com/photo-XXXXXXX?w=700&q=80"
+      -->
+      <img
+        class="about-photo"
+        src="https://i.imgur.com/nrLrbId.jpg"
+        alt="Owner photo"
+      />
+      <div class="about-tag">🎀 Founder & Creative Director</div>
+      <div class="about-deco"></div>
+    </div>
+
+    <div class="about-text reveal">
+      <!--
+        ★ REPLACE "Sophia" with the real owner name
+        ★ REPLACE "22" with real age if you want
+      -->
+      <h2>Hello, I'm <em>Margaret</em> 🌸</h2>
+      <p class="about-script">the girl behind Garetquettes 🎀</p>
+
+      <!--
+        ★ EDIT these paragraphs with the owner's real story
+      -->
+      <p>
+        Garetquettes is a soft, delicate little world inspired by the feeling of being a porcelain doll — gentle, timeless, and effortlessly beautiful. It’s a space made for girls who adore all things coquette: dainty details, soft silhouettes, ribbons, lace, and that quiet kind of elegance that feels both fragile and powerful at the same time ✧
+      </p>
+      <p>
+        Every piece you’ll find here is carefully chosen to capture that dreamy, doll-like charm — the kind that makes you feel pretty in the simplest moments, like you’re living inside your own romantic daydream. Whether it’s a sweet outfit, a charming accessory, or a tiny detail that completes your look, Garetquettes is here to make you feel soft, feminine, and a little bit magical 💌
+      </p>
+      <p>
+        Because sometimes, the most beautiful thing you can be is soft — like a porcelain doll, delicate yet unforgettable. So come step into my world, where everything is a little softer, sweeter, and made just for you ♡
+      </p>
+
+      <div class="about-pills">
+        <!-- ★ EDIT the interest tags below -->
+        <span class="apill">🎀 Coquette Aesthetic</span>
+        <span class="apill">🌸 Fashion Lover</span>
+        <span class="apill">📚 Bookworm</span>
+        <span class="apill">☕ Coffee Addict</span>
+        <span class="apill">🎬 Romantic Films</span>
+        <span class="apill">🌷 Flower Markets</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- VALUES -->
+<section class="values">
+  <div class="values-inner">
+    <h3>Our <em>Values</em></h3>
+    <p class="val-sub">What we believe in 🌸</p>
+    <div class="val-grid">
+      <div class="val-card reveal">
+        <div class="val-icon">🎀</div>
+        <div class="val-title">Handpicked with Love</div>
+        <div class="val-desc">Every single piece is carefully chosen by Sophia herself. If she wouldn't wear it, it doesn't make the cut.</div>
+      </div>
+      <div class="val-card reveal">
+        <div class="val-icon">🌸</div>
+        <div class="val-title">Packaged Beautifully</div>
+        <div class="val-desc">Unboxing is part of the magic. Every order is wrapped in tissue, tied with a ribbon, and sent with a handwritten note.</div>
+      </div>
+      <div class="val-card reveal">
+        <div class="val-icon">💕</div>
+        <div class="val-title">Made for Real Girls</div>
+        <div class="val-desc">Our pieces are designed to make you feel confident and feminine — no matter your size, style, or budget.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="foot-logo">🎀 Garet quettes</div>
+  <p>© 2025 Garet quettes. All rights reserved.</p>
+  <p>Made with love &amp; ribbons 🌸</p>
+</footer>
+
+<script>
+  const els=document.querySelectorAll('.reveal');
+  const io=new IntersectionObserver(entries=>{entries.forEach((e,i)=>{if(e.isIntersecting){setTimeout(()=>e.target.classList.add('visible'),i*100);io.unobserve(e.target);}});},{threshold:.1});
+  els.forEach(el=>io.observe(el));
+</script>
+</body>
+</html>

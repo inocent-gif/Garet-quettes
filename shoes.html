@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Shoes — Garet quettes</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Dancing+Script:wght@500&display=swap" rel="stylesheet"/>
+  <style>
+    :root{--pink-blush:#f9e8ec;--pink-soft:#f2c4ce;--pink-mid:#e8a0af;--pink-deep:#c97b8a;--pink-rose:#b05070;--cream:#fdf6f0;--white:#ffffff;--text-dark:#3a2030;--text-mid:#7a5060;--bow:#e8748a;--font-h:'Playfair Display',serif;--font-b:'Cormorant Garamond',serif;--font-s:'Dancing Script',cursive;}
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{font-family:var(--font-b);background:var(--cream);color:var(--text-dark);overflow-x:hidden;}
+    nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(253,246,240,.93);backdrop-filter:blur(10px);border-bottom:1.5px solid var(--pink-soft);padding:14px 48px;display:flex;align-items:center;justify-content:space-between;}
+    .nav-logo{font-family:var(--font-s);font-size:1.9rem;color:var(--pink-rose);text-decoration:none;}
+    .nav-links{display:flex;gap:32px;list-style:none;}
+    .nav-links a{font-family:var(--font-b);font-size:1rem;color:var(--text-mid);text-decoration:none;letter-spacing:1.5px;text-transform:uppercase;font-weight:300;transition:color .3s;position:relative;}
+    .nav-links a::after{content:'';position:absolute;bottom:-3px;left:0;width:0;height:1.5px;background:var(--bow);transition:width .3s;}
+    .nav-links a:hover{color:var(--bow);}
+    .nav-links a:hover::after,.nav-links a.active::after{width:100%;}
+    .nav-links a.active{color:var(--bow);}
+    .page-header{padding:130px 48px 60px;text-align:center;background:linear-gradient(135deg,var(--pink-blush),var(--cream));}
+    .page-header h1{font-family:var(--font-h);font-size:clamp(2.5rem,5vw,4rem);color:var(--text-dark);}
+    .page-header h1 em{color:var(--pink-rose);font-style:italic;}
+    .page-header p{font-family:var(--font-s);font-size:1.2rem;color:var(--bow);margin-top:8px;}
+    .breadcrumb{font-size:.9rem;color:var(--text-mid);margin-bottom:14px;letter-spacing:.5px;}
+    .breadcrumb a{color:var(--pink-deep);text-decoration:none;}
+    .breadcrumb a:hover{text-decoration:underline;}
+    .shop-wrap{padding:60px 48px 100px;max-width:1200px;margin:0 auto;}
+    .product-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:32px;}
+    .product-card{background:var(--white);border-radius:20px;overflow:hidden;box-shadow:0 4px 20px rgba(180,80,110,.08);border:1.5px solid var(--pink-blush);cursor:pointer;transition:transform .35s,box-shadow .35s;opacity:0;transform:translateY(24px);}
+    .product-card.visible{opacity:1;transform:translateY(0);transition:opacity .5s ease,transform .5s ease,box-shadow .3s;}
+    .product-card:hover{transform:translateY(-6px);box-shadow:0 14px 40px rgba(180,80,110,.18);}
+    .product-card img{width:100%;height:280px;object-fit:cover;display:block;background:var(--pink-blush);}
+    .pcard-body{padding:18px 20px 22px;}
+    .pbadge{display:inline-block;font-family:var(--font-s);font-size:.78rem;background:var(--pink-blush);color:var(--pink-rose);padding:3px 10px;border-radius:20px;margin-bottom:7px;}
+    .pname{font-family:var(--font-h);font-size:1.15rem;color:var(--text-dark);margin-bottom:4px;}
+    .pname em{color:var(--pink-rose)}
+    .pprice{font-size:1rem;color:var(--pink-rose);font-weight:400;letter-spacing:.5px;}
+    .pview{display:block;margin-top:12px;padding:9px 0;background:var(--pink-blush);color:var(--pink-rose);border:none;border-radius:30px;width:100%;font-family:var(--font-b);font-size:.95rem;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;transition:background .3s,color .3s;}
+    .pview:hover{background:var(--pink-rose);color:var(--white);}
+    .modal-overlay{position:fixed;inset:0;background:rgba(58,32,48,.45);backdrop-filter:blur(4px);z-index:500;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s;}
+    .modal-overlay.open{opacity:1;pointer-events:all;}
+    .modal{background:var(--white);border-radius:28px;max-width:680px;width:90%;max-height:90vh;overflow:hidden;display:grid;grid-template-columns:1fr 1fr;box-shadow:0 24px 80px rgba(58,32,48,.22);transform:translateY(30px) scale(.97);transition:transform .35s,opacity .35s;opacity:0;}
+    .modal-overlay.open .modal{transform:translateY(0) scale(1);opacity:1;}
+    .modal-img{width:100%;height:100%;min-height:320px;object-fit:cover;display:block;background:var(--pink-blush);}
+    .modal-body{padding:32px 28px;display:flex;flex-direction:column;justify-content:center;overflow-y:auto;}
+    .modal-badge{font-family:var(--font-s);font-size:.9rem;color:var(--bow);margin-bottom:8px;}
+    .modal-name{font-family:var(--font-h);font-size:1.6rem;color:var(--text-dark);line-height:1.2;margin-bottom:6px;}
+    .modal-price{font-size:1.2rem;color:var(--pink-rose);letter-spacing:.5px;margin-bottom:16px;}
+    .modal-desc{font-size:1rem;color:var(--text-mid);line-height:1.75;font-weight:300;margin-bottom:22px;}
+    .modal-close{position:absolute;top:18px;right:22px;background:var(--pink-blush);border:none;border-radius:50%;width:36px;height:36px;font-size:1.1rem;cursor:pointer;color:var(--pink-rose);transition:background .2s;}
+    .modal-close:hover{background:var(--pink-soft);}
+    .modal-btn{display:inline-block;padding:12px 32px;background:var(--pink-rose);color:var(--white);border:none;border-radius:50px;font-family:var(--font-b);font-size:1rem;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;transition:background .3s;}
+    .modal-btn:hover{background:var(--bow);}
+    .modal-wrapper{position:relative;}
+    footer{background:var(--text-dark);color:var(--pink-soft);text-align:center;padding:40px 24px;font-family:var(--font-b);}
+    .foot-logo{font-family:var(--font-s);font-size:1.8rem;color:var(--pink-mid);margin-bottom:10px;}
+    footer p{opacity:.55;font-size:.9rem;margin-top:6px;}
+    @media(max-width:800px){nav{padding:14px 20px;}.nav-links{gap:16px;}.page-header{padding:110px 20px 50px;}.shop-wrap{padding:40px 20px 80px;}.modal{grid-template-columns:1fr;}.modal-img{min-height:220px;max-height:220px;}}
+  </style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="nav-logo">🎀 Garet quettes</a>
+  <ul class="nav-links">
+    <li><a href="about.html">About</a></li>
+    <li><a href="clothes.html">Clothes</a></li>
+    <li><a href="shoes.html" class="active">Shoes</a></li>
+    <li><a href="accessories.html">Accessories</a></li>
+    <li><a href="hats.html">Hats</a></li>
+  </ul>
+</nav>
+<div class="page-header">
+  <div class="breadcrumb"><a href="index.html">Home</a> / Shoes</div>
+  <h1>Walk <em>Pretty</em></h1>
+  <p>Step softly, darling 🎀</p>
+</div>
+<div class="shop-wrap">
+  <div class="product-grid">
+
+    <!-- ★ TO ADD: Copy a product-card block, update data-* attrs + img src + .pname + .pprice -->
+    <div class="product-card"
+      data-img="https://i.imgur.com/W0yqJ0t.jpg"
+      data-name="Blush Cloud Platforms"
+      data-price="₱1,599"
+      data-badge="🎀 Fan Fave"
+      data-desc="High-profile platform heels in a soft baby pink finish. These feature oversized ribbon accents with delicate lace ruffles, designed for a bold, doll-like aesthetic.">
+      <img src="https://i.imgur.com/W0yqJ0t.jpg" alt="Satin Bow Mary Janes"/>
+      <div class="pcard-body">
+        <span class="pbadge">🎀 Fan Fave</span>
+        <div class="pname"><em>Garet quettes:</em> Blush Cloud Platforms</div>
+        <div class="pprice">₱1,599</div>
+        <button class="pview">View Details</button>
+      </div>
+    </div>
+
+    <div class="product-card"
+      data-img="https://i.imgur.com/1XKOMfT.jpg"
+      data-name="Piping Bow Mary Janes"
+      data-price="₱1,199"
+      data-badge="🌸 Classic"
+      data-desc="A classic, sophisticated heel featuring a cream base with black contrast piping. The dainty bow on the toe adds a touch of 'preppy' charm to this versatile silhouette.">
+      <img src="https://i.imgur.com/1XKOMfT.jpg" alt="Blush Ballet Flats"/>
+      <div class="pcard-body">
+        <span class="pbadge">🌸 Classic</span>
+        <div class="pname"><em>Garret quettes:</em> Piping Bow Mary Janes</div>
+        <div class="pprice">₱1,199</div>
+        <button class="pview">View Details</button>
+      </div>
+    </div>
+
+    <div class="product-card"
+      data-img="https://i.imgur.com/EHOnYBy.jpg"
+      data-name="Lace-Up Dreamer Heels"
+      data-price="₱1,849"
+      data-badge="✨ Elegant"
+      data-desc="Inspired by ballerina slippers, these pumps feature elegant criss-cross straps that wrap around the leg. Adorned with mini pink bows and pearl-like details for a romantic, whimsical look.">
+      <img src="https://i.imgur.com/EHOnYBy.jpg" alt="Lace-Up Dreamer Heels"/>
+      <div class="pcard-body">
+        <span class="pbadge">✨ Elegant</span>
+        <div class="pname"><em>Garet quettes:</em> Lace-Up Dreamer Heels</div>
+        <div class="pprice">₱1,849</div>
+        <button class="pview">View Details</button>
+      </div>
+    </div>
+
+    <div class="product-card"
+      data-img="https://i.imgur.com/3t3pkCN.jpg"
+      data-name="Petal Ombré Mary Janes"
+      data-price="₱2,100"
+      data-badge="🎀 Trendy"
+      data-desc="An elegant block heel featuring a smooth color transition from ivory to soft rose. The minimalist strap and sturdy heel make it a perfect choice for a sweet yet comfortable everyday style.">
+      <img src="https://i.imgur.com/3t3pkCN.jpg" alt="Petal Ombré Mary Janes"/>
+      <div class="pcard-body">
+        <span class="pbadge">🎀 Trendy</span>
+        <div class="pname"><em>Garet quettes:</em> Petal Ombré Mary Janes</div>
+        <div class="pprice">₱2,100</div>
+        <button class="pview">View Details</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-wrapper">
+    <div class="modal" id="modal">
+      <img class="modal-img" id="modalImg" src="" alt=""/>
+      <div class="modal-body">
+        <div class="modal-badge" id="modalBadge"></div>
+        <div class="modal-name"  id="modalName"></div>
+        <div class="modal-price" id="modalPrice"></div>
+        <div class="modal-desc"  id="modalDesc"></div>
+        <button class="modal-btn">Add to Cart 🎀</button>
+      </div>
+    </div>
+    <button class="modal-close" id="modalClose">✕</button>
+  </div>
+</div>
+
+<footer>
+  <div class="foot-logo">🎀 Garet quettes</div>
+  <p>© 2025 Garet quettes. All rights reserved.</p>
+  <p>Made with love &amp; ribbons 🌸</p>
+</footer>
+<script>
+  const cards=document.querySelectorAll('.product-card');
+  const io=new IntersectionObserver(entries=>{entries.forEach((e,i)=>{if(e.isIntersecting){setTimeout(()=>e.target.classList.add('visible'),i*80);io.unobserve(e.target);}});},{threshold:.1});
+  cards.forEach(c=>io.observe(c));
+  const overlay=document.getElementById('modalOverlay');
+  cards.forEach(card=>{card.addEventListener('click',()=>{document.getElementById('modalImg').src=card.dataset.img;document.getElementById('modalName').textContent=card.dataset.name;document.getElementById('modalPrice').textContent=card.dataset.price;document.getElementById('modalDesc').textContent=card.dataset.desc;document.getElementById('modalBadge').textContent=card.dataset.badge;overlay.classList.add('open');document.body.style.overflow='hidden';});});
+  function closeModal(){overlay.classList.remove('open');document.body.style.overflow='';}
+  document.getElementById('modalClose').addEventListener('click',closeModal);
+  overlay.addEventListener('click',e=>{if(e.target===overlay)closeModal();});
+  document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
+</script>
+</body>
+</html>
